@@ -59,6 +59,27 @@
 
 <script>
 
+  // This function will play the audio from the corresponding key 
+  function playSound(e){
+    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`); 
+    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+    if(!audio) return;  //if the key pressed has no audio, it is ignored
+
+    audio.currentTime = 0;  //restart the audio every time the function is called
+    audio.play();
+    key.classList.add('playing'); //allow for css transition
+  }
+
+  // This function will remove the class 'playing', which will remove its css properties
+  function removeTransition(e) {
+    if (e.propertyName !== 'transform') return; //ignore any css propety that isn't transform
+    this.classList.remove('playing');
+  }
+
+  const keys = document.querySelectorAll('.key');
+  keys.forEach(key => key.addEventListener('transitionend', removeTransition)); //listen for key transition (audio plays), undo transition
+  window.addEventListener('keydown', playSound);
+
 </script>
 
 
